@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buena Vista Carwash</title>
+<meta name="description" content="Buena Vista Carwash. Drive in dirty, drive out shining.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sky: #0b1e3f;
+    --sky-2: #12386e;
+    --aqua: #2ee6ff;
+    --pink: #ff4fa3;
+    --sun: #ffd23f;
+    --white: #f4fbff;
+    --muted: #a9c3e6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Inter", system-ui, sans-serif;
+    background: var(--sky);
+    color: var(--white);
+    overflow-x: hidden;
+    line-height: 1.5;
+  }
+  a { color: inherit; }
+
+  /* ---------- Floating bubbles (whole page) ---------- */
+  .bubbles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .bubble {
+    position: absolute; bottom: -80px; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.9), rgba(46,230,255,.25) 40%, rgba(46,230,255,.05) 70%);
+    border: 1px solid rgba(255,255,255,.35);
+    animation: rise linear infinite;
+  }
+  @keyframes rise {
+    0%   { transform: translateY(0) translateX(0); opacity: 0; }
+    10%  { opacity: 1; }
+    50%  { transform: translateY(-55vh) translateX(30px); }
+    100% { transform: translateY(-115vh) translateX(-20px); opacity: 0; }
+  }
+
+  /* ---------- Nav ---------- */
+  nav {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 24px;
+    background: rgba(11,30,63,.7); backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .logo { font-family: "Bungee", sans-serif; font-size: 1.1rem; letter-spacing: 1px; text-decoration: none; }
+  .logo span { color: var(--aqua); }
+  nav .links a { margin-left: 18px; text-decoration: none; font-weight: 600; color: var(--muted); transition: color .2s; }
+  nav .links a:hover { color: var(--aqua); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative; z-index: 1;
+    min-height: 92vh;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; padding: 60px 16px 0;
+    background: radial-gradient(ellipse at top, var(--sky-2), transparent 70%);
+    overflow: hidden;
+  }
+  .hero h1 {
+    font-family: "Bungee", sans-serif;
+    font-size: clamp(2.4rem, 9vw, 6rem);
+    line-height: 1;
+    background: linear-gradient(90deg, var(--aqua), var(--white), var(--pink), var(--aqua));
+    background-size: 300% 100%;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: shimmer 6s linear infinite;
+  }
+  @keyframes shimmer { to { background-position: 300% 0; } }
+  .hero p.tag { margin-top: 14px; font-size: clamp(1rem, 3vw, 1.35rem); color: var(--muted); }
+  .btn {
+    display: inline-block; margin-top: 28px;
+    padding: 14px 32px; border-radius: 999px;
+    background: linear-gradient(135deg, var(--aqua), var(--pink));
+    color: #06142b; font-weight: 800; text-decoration: none; font-size: 1.05rem;
+    box-shadow: 0 0 0 0 rgba(46,230,255,.6);
+    animation: pulse 2.2s infinite;
+    transition: transform .2s;
+  }
+  .btn:hover { transform: scale(1.06) rotate(-1deg); }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(46,230,255,.55); }
+    70% { box-shadow: 0 0 0 18px rgba(46,230,255,0); }
+    100% { box-shadow: 0 0 0 0 rgba(46,230,255,0); }
+  }
+
+  /* ---------- Wash tunnel scene ---------- */
+  .scene { position: relative; width: 100%; max-width: 900px; height: 220px; margin-top: 40px; }
+  .road {
+    position: absolute; bottom: 0; left: -50vw; right: -50vw; height: 34px;
+    background: #1b2a44;
+    border-top: 3px solid #2a3f63;
+  }
+  .road::after {
+    content: ""; position: absolute; top: 14px; left: 0; right: 0; height: 4px;
+    background: repeating-linear-gradient(90deg, var(--sun) 0 40px, transparent 40px 80px);
+    animation: lanes 1s linear infinite;
+  }
+  @keyframes lanes { to { background-position: -80px 0; } }
+
+  .tunnel {
+    position: absolute; bottom: 34px; left: 50%; transform: translateX(-50%);
+    width: 220px; height: 170px;
+    border: 8px solid var(--aqua); border-bottom: none;
+    border-radius: 24px 24px 0 0;
+    box-shadow: 0 0 30px rgba(46,230,255,.5), inset 0 0 30px rgba(46,230,255,.25);
+  }
+  .tunnel::before {
+    content: "WASH"; position: absolute; top: -34px; left: 50%; transform: translateX(-50%);
+    font-family: "Bungee", sans-serif; color: var(--pink); font-size: 1.1rem; letter-spacing: 4px;
+    text-shadow: 0 0 10px var(--pink);
+    animation: flicker 3s infinite;
+  }
+  @keyframes flicker { 0%,19%,21%,60%,62%,100% { opacity: 1; } 20%,61% { opacity: .3; } }
+
+  .brush {
+    position: absolute; bottom: 0; width: 34px; height: 120px; border-radius: 17px;
+    background: repeating-linear-gradient(0deg, var(--pink) 0 8px, #ff8cc4 8px 16px);
+    animation: spin .35s linear infinite;
+    opacity: .9;
+  }
+  .brush.l { left: 10px; } .brush.r { right: 10px; }
+  @keyframes spin { to { background-position: 0 16px; } }
+
+  .drop {
+    position: absolute; top: 0; width: 4px; height: 14px; border-radius: 2px;
+    background: var(--aqua);
+    animation: fall .8s linear infinite;
+  }
+  @keyframes fall { from { transform: translateY(0); opacity: 1; } to { transform: translateY(150px); opacity: 0; } }
+
+  .car {
+    position: absolute; bottom: 30px; left: 0; width: 170px;
+    animation: drive 7s cubic-bezier(.45,.05,.55,.95) infinite;
+  }
+  .car .body { transition: fill .3s; }
+  .car .wheel { transform-box: fill-box; transform-origin: center; animation: roll .5s linear infinite; }
+  @keyframes roll { to { transform: rotate(360deg); } }
+  @keyframes drive {
+    0%   { transform: translateX(-200px); }
+    40%  { transform: translateX(calc(50vw - 101px)); }
+    55%  { transform: translateX(calc(50vw - 101px)); }
+    100% { transform: translateX(calc(100vw + 50px)); }
+  }
+  @media (min-width: 900px) {
+    @keyframes drive {
+      0%   { transform: translateX(-200px); }
+      40%  { transform: translateX(365px); }
+      55%  { transform: translateX(365px); }
+      100% { transform: translateX(1100px); }
+    }
+  }
+  .sparkle {
+    position: absolute; width: 18px; height: 18px; opacity: 0;
+    animation: twinkle 7s infinite;
+  }
+  @keyframes twinkle {
+    0%, 55% { opacity: 0; transform: scale(.2) rotate(0); }
+    62% { opacity: 1; transform: scale(1.2) rotate(90deg); }
+    75% { opacity: 0; transform: scale(.4) rotate(180deg); }
+    100% { opacity: 0; }
+  }
+
+  /* ---------- Sections ---------- */
+  section { position: relative; z-index: 1; padding: 90px 20px; max-width: 1100px; margin: 0 auto; }
+  h2 {
+    font-family: "Bungee", sans-serif; font-size: clamp(1.8rem, 5vw, 2.8rem);
+    text-align: center; margin-bottom: 40px;
+  }
+  h2 span { color: var(--aqua); }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; }
+  .card {
+    position: relative; overflow: hidden;
+    background: linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 22px; padding: 30px 24px; text-align: center;
+    transition: transform .3s, border-color .3s, box-shadow .3s;
+  }
+  .card:hover { transform: translateY(-8px) rotate(-.5deg); border-color: var(--aqua); box-shadow: 0 20px 40px rgba(46,230,255,.15); }
+  .card::before {
+    content: ""; position: absolute; top: 0; left: -120%; width: 60%; height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,.15), transparent);
+    transition: left .7s;
+  }
+  .card:hover::before { left: 140%; }
+  .card .icon { font-size: 2.6rem; display: inline-block; animation: bob 3s ease-in-out infinite; }
+  .card:nth-child(2) .icon { animation-delay: .4s; }
+  .card:nth-child(3) .icon { animation-delay: .8s; }
+  @keyframes bob { 50% { transform: translateY(-8px); } }
+  .card h3 { font-family: "Bungee", sans-serif; font-size: 1.3rem; margin: 10px 0 6px; }
+  .card ul { list-style: none; color: var(--muted); margin-top: 12px; }
+  .card li::before { content: "✓ "; color: var(--aqua); font-weight: 800; }
+  .card.hot { border-color: var(--pink); }
+  .badge {
+    position: absolute; top: 14px; right: -34px; transform: rotate(45deg);
+    background: var(--pink); color: #fff; font-size: .7rem; font-weight: 800;
+    padding: 4px 40px; letter-spacing: 1px;
+  }
+
+  .info { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; }
+  .info .card { text-align: left; }
+  .info .card h3 { font-size: 1.1rem; color: var(--aqua); }
+  .info .card p { color: var(--muted); }
+
+  footer {
+    position: relative; z-index: 1; text-align: center; padding: 40px 16px;
+    color: var(--muted); font-size: .9rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+  }
+
+  /* ---------- Scroll reveal ---------- */
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity .8s, transform .8s; }
+  .reveal.show { opacity: 1; transform: none; }
+
+  @media (max-width: 560px) {
+    nav .links { display: none; }
+    .tunnel { width: 190px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bubbles" id="bubbles"></div>
+
+<nav>
+  <a href="#" class="logo">BUENA VISTA <span>CARWASH</span></a>
+  <div class="links">
+    <a href="#washes">Washes</a>
+    <a href="#visit">Visit</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <h1>Buena Vista<br>Carwash</h1>
+  <p class="tag">Drive in dirty. Drive out shining. ✨</p>
+  <a class="btn" href="#visit">Come Get Clean</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="tunnel">
+      <div class="brush l"></div>
+      <div class="brush r"></div>
+      <div id="drops"></div>
+    </div>
+
+    <svg class="car" viewBox="0 0 170 70">
+      <path class="body" d="M10 48 Q8 34 24 32 L48 30 L66 12 Q72 8 82 8 L118 8 Q128 8 134 16 L148 30 Q164 32 164 46 L164 52 L10 52 Z" fill="#ff4fa3"/>
+      <path d="M72 14 L80 13 L80 30 L58 30 Z" fill="#bff6ff"/>
+      <path d="M86 13 L116 13 Q124 13 128 18 L138 30 L86 30 Z" fill="#bff6ff"/>
+      <rect x="150" y="36" width="10" height="6" rx="2" fill="#ffd23f"/>
+      <rect x="12" y="38" width="8" height="5" rx="2" fill="#ff2a2a"/>
+      <g class="wheel"><circle cx="44" cy="54" r="13" fill="#111"/><circle cx="44" cy="54" r="6" fill="#ccc"/><rect x="43" y="44" width="2" height="20" fill="#888"/></g>
+      <g class="wheel"><circle cx="132" cy="54" r="13" fill="#111"/><circle cx="132" cy="54" r="6" fill="#ccc"/><rect x="131" y="44" width="2" height="20" fill="#888"/></g>
+    </svg>
+
+    <svg class="sparkle" style="left:58%;bottom:120px" viewBox="0 0 24 24"><path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z" fill="#ffd23f"/></svg>
+    <svg class="sparkle" style="left:66%;bottom:80px;animation-delay:.2s" viewBox="0 0 24 24"><path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z" fill="#fff"/></svg>
+    <svg class="sparkle" style="left:72%;bottom:130px;animation-delay:.35s" viewBox="0 0 24 24"><path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z" fill="#2ee6ff"/></svg>
+
+    <div class="road"></div>
+  </div>
+</header>
+
+<section id="washes">
+  <h2 class="reveal">Pick Your <span>Wash</span></h2>
+  <div class="cards">
+    <div class="card reveal">
+      <div class="icon">🫧</div>
+      <h3>Basic</h3>
+      <p>A quick rinse and shine.</p>
+      <ul><li>Soap &amp; rinse</li><li>Spot-free finish</li><li>Air dry</li></ul>
+    </div>
+    <div class="card hot reveal">
+      <div class="badge">POPULAR</div>
+      <div class="icon">🚗</div>
+      <h3>Deluxe</h3>
+      <p>Everything in Basic, plus more.</p>
+      <ul><li>Underbody wash</li><li>Tire shine</li><li>Triple foam</li></ul>
+    </div>
+    <div class="card reveal">
+      <div class="icon">✨</div>
+      <h3>Ultimate</h3>
+      <p>The full showroom treatment.</p>
+      <ul><li>Wax &amp; protect</li><li>Wheel cleaner</li><li>Rain repellent</li></ul>
+    </div>
+  </div>
+</section>
+
+<section id="visit">
+  <h2 class="reveal">Come <span>Visit</span></h2>
+  <div class="info">
+    <div class="card reveal">
+      <h3>📍 Location</h3>
+      <p>Find us on Google Maps for directions.</p>
+      <a class="btn" style="animation:none;font-size:.95rem;padding:10px 22px;margin-top:16px"
+         href="https://www.google.com/maps/search/?api=1&query=Buena+Vista+Carwash" target="_blank" rel="noopener">Get Directions</a>
+    </div>
+    <div class="card reveal">
+      <h3>🕒 Hours</h3>
+      <p>Check our Google listing for today's hours.</p>
+    </div>
+    <div class="card reveal">
+      <h3>💧 Why Us</h3>
+      <p>Friendly crew, fast service, and a car that sparkles every time.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © <span id="year"></span> Buena Vista Carwash · Stay shiny ✨
+</footer>
+
+<script>
+  // Floating bubbles
+  const bubbles = document.getElementById('bubbles');
+  for (let i = 0; i < 22; i++) {
+    const b = document.createElement('div');
+    const size = 10 + Math.random() * 50;
+    b.className = 'bubble';
+    b.style.width = b.style.height = size + 'px';
+    b.style.left = Math.random() * 100 + '%';
+    b.style.animationDuration = 8 + Math.random() * 12 + 's';
+    b.style.animationDelay = -Math.random() * 20 + 's';
+    bubbles.appendChild(b);
+  }
+
+  // Water drops inside the tunnel
+  const drops = document.getElementById('drops');
+  for (let i = 0; i < 14; i++) {
+    const d = document.createElement('div');
+    d.className = 'drop';
+    d.style.left = 20 + Math.random() * 160 + 'px';
+    d.style.animationDelay = Math.random() * .8 + 's';
+    drops.appendChild(d);
+  }
+
+  // Car color changes after each pass through the wash
+  const carBody = document.querySelector('.car .body');
+  const colors = ['#ff4fa3', '#2ee6ff', '#ffd23f', '#8cff6b', '#b38cff'];
+  let c = 0;
+  document.querySelector('.car').addEventListener('animationiteration', e => {
+    if (e.animationName === 'drive') carBody.setAttribute('fill', colors[++c % colors.length]);
+  });
+
+  // Scroll reveal
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('show'); io.unobserve(en.target); } });
+  }, { threshold: .15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
