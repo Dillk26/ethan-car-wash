@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1446c8">
 <title>Buena Vista Car Wash</title>
 <meta name="description" content="Buena Vista Car Wash — open 24 hours a day, 7 days a week.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,6 +21,7 @@
     --text: #4b5a78;
     --line: #dde5f3;
     --white: #ffffff;
+    --navh: 76px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -50,7 +52,7 @@
   /* ---------- Nav ---------- */
   .nav { position: sticky; top: 0; z-index: 50; background: rgba(20,70,200,.0); transition: background .3s, box-shadow .3s; }
   .nav.solid { background: var(--blue); box-shadow: 0 6px 24px rgba(10,35,102,.25); }
-  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 76px; }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: var(--navh); }
   .logo { display: flex; align-items: center; gap: 12px; color: #fff; }
   .logo .mark { background: #fff; color: var(--blue); border: 3px solid var(--yellow); border-radius: 6px; padding: 4px 9px 3px; font-family: "Archivo", sans-serif; font-stretch: 125%; font-weight: 900; font-size: .95rem; line-height: 1; letter-spacing: .02em; }
   .logo .name { font-family: "Archivo", sans-serif; font-stretch: 110%; font-weight: 800; font-size: .95rem; line-height: 1.1; text-transform: uppercase; letter-spacing: .04em; }
@@ -63,7 +65,7 @@
   .links .btn { padding: 11px 20px; font-size: .8rem; }
 
   /* ---------- Hero ---------- */
-  .hero { position: relative; margin-top: -76px; padding: 150px 0 170px; color: #fff; overflow: hidden;
+  .hero { position: relative; margin-top: calc(-1 * var(--navh)); padding: 150px 0 170px; color: #fff; overflow: hidden;
     background: radial-gradient(1200px 600px at 85% -10%, #3b7bff 0%, transparent 60%), linear-gradient(170deg, var(--blue-2) 0%, var(--blue) 45%, var(--blue-deep) 100%); }
   .hero .wrap { position: relative; z-index: 2; display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: center; }
   .pill { display: inline-flex; align-items: center; gap: 10px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25); padding: 7px 16px 7px 8px; border-radius: 999px; font-weight: 600; font-size: .85rem; }
@@ -139,7 +141,7 @@
 
   /* ---------- Scroll-driven wash process ---------- */
   .process { position: relative; height: 460vh; padding: 0; background: var(--blue-deep); color: #fff; }
-  .process .stick { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; justify-content: center; overflow: hidden; padding-top: 64px; }
+  .process .stick { position: sticky; top: 0; height: 100vh; height: 100svh; display: flex; flex-direction: column; justify-content: center; overflow: hidden; padding-top: var(--navh); }
   .process .wrap { width: 100%; }
   .process .eyebrow { color: var(--yellow); }
   .process h2 { font-size: clamp(1.8rem, 4vw, 3rem); }
@@ -202,7 +204,6 @@
   .rv { width: 360px; flex: none; background: #fff; border-radius: 18px; padding: 26px; border: 1px solid var(--line); box-shadow: 0 10px 30px rgba(10,35,102,.06); display: flex; flex-direction: column; gap: 16px; transition: transform .3s, box-shadow .3s; }
   .rv:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(10,35,102,.12); }
   .rv blockquote { color: var(--ink); font-size: .98rem; flex: 1; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 6; line-clamp: 6; overflow: hidden; }
-  .rv:hover blockquote { -webkit-line-clamp: unset; line-clamp: unset; }
   .rv .who { display: flex; align-items: center; gap: 12px; padding-top: 14px; border-top: 1px solid var(--line); }
   .rv .av { width: 40px; height: 40px; border-radius: 50%; background: var(--blue); color: #fff; display: grid; place-items: center; font-weight: 700; text-transform: uppercase; }
   .rv .who b { display: block; font-size: .92rem; }
@@ -245,8 +246,51 @@
   .rv-in.show { opacity: 1; transform: none; }
   .dl1 { transition-delay: .1s; } .dl2 { transition-delay: .2s; } .dl3 { transition-delay: .3s; }
 
+  /* ---------- Mobile menu ---------- */
+  .menu-btn { display: none; width: 46px; height: 46px; border-radius: 12px; border: 0; background: rgba(255,255,255,.14); cursor: pointer; place-items: center; }
+  .menu-btn span { display: block; width: 20px; height: 2px; background: #fff; border-radius: 2px; position: relative; transition: background .2s; }
+  .menu-btn span::before, .menu-btn span::after { content: ""; position: absolute; left: 0; width: 20px; height: 2px; background: #fff; border-radius: 2px; transition: transform .3s; }
+  .menu-btn span::before { top: -6px; } .menu-btn span::after { top: 6px; }
+  .nav.open .menu-btn span { background: transparent; }
+  .nav.open .menu-btn span::before { transform: translateY(6px) rotate(45deg); }
+  .nav.open .menu-btn span::after { transform: translateY(-6px) rotate(-45deg); }
+  .mnav { display: none; position: absolute; left: 0; right: 0; top: 100%; background: var(--blue); padding: 8px 16px 22px; box-shadow: 0 20px 30px rgba(10,35,102,.3); clip-path: inset(0 0 100% 0); visibility: hidden; transition: clip-path .35s cubic-bezier(.2,.8,.2,1), visibility 0s .35s; }
+  .nav.open .mnav { clip-path: inset(0 0 0 0); visibility: visible; transition: clip-path .35s cubic-bezier(.2,.8,.2,1); }
+  .mnav a { display: block; padding: 14px 4px; color: #fff; font-family: "Archivo", sans-serif; font-stretch: 115%; font-weight: 800; font-size: 1.15rem; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,.12); }
+  .mnav a.btn { display: flex; justify-content: center; margin-top: 16px; border: 0; font-size: .9rem; }
+  .nav.open { background: var(--blue); }
+
+  /* review "read more" */
+  .rv .hint { display: none; font-size: .82rem; font-weight: 600; color: var(--blue); margin-top: -8px; }
+  .rv.long { cursor: pointer; }
+  .rv.long .hint { display: block; }
+  .rv.open blockquote { -webkit-line-clamp: unset; line-clamp: unset; }
+  .marquee.hold { animation-play-state: paused; }
+  /* touch screens: swipeable carousel instead of auto-scroll */
+  @media (hover: none) {
+    .marquee { animation: none; width: auto; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 24px; padding: 6px 24px 16px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .marquee::-webkit-scrollbar { display: none; }
+    .marquee .rv { scroll-snap-align: start; }
+    .marquee .rv.dup { display: none; }
+  }
+  @media (hover: none) and (max-width: 480px) { .marquee { padding: 6px 16px 16px; scroll-padding: 0 16px; } .rv { width: 82vw; } }
+
   @media (max-width: 960px) {
-    .hero { padding: 130px 0 150px; }
+    :root { --navh: 64px; }
+    .menu-btn { display: grid; }
+    .mnav { display: block; }
+    .links .btn { display: none; }
+    .logo .mark { font-size: .85rem; }
+    .hero { padding: 120px 0 140px; }
+    .photo { max-width: 460px; width: 100%; justify-self: center; }
+    .process { height: 380vh; }
+    .process h2 { font-size: clamp(1.6rem, 7vw, 2.4rem); }
+    .ptop { gap: 12px; }
+    .hud { width: 100%; }
+    .stages { grid-template-columns: repeat(4, 1fr) !important; gap: 6px !important; margin-top: 16px; }
+    .stage { flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px; padding: 9px 4px; }
+    .stage h3 { font-size: .64rem; letter-spacing: .01em; }
+    .stage.on { transform: none; }
     .hero .wrap, .visit { grid-template-columns: 1fr; }
     .photo { max-width: 520px; }
     .badge { width: 120px; height: 120px; right: -10px; top: -44px; }
@@ -254,7 +298,6 @@
     .stats .grid { grid-template-columns: repeat(2, 1fr); }
     .stat:nth-child(3) { border-left: none; }
     .stat:nth-child(n+3) { border-top: 1px solid var(--line); }
-    .stages { grid-template-columns: repeat(2, 1fr); gap: 10px; }
     .stage p { display: none; }
     .links a:not(.btn) { display: none; }
     section { padding: 80px 0; }
@@ -265,6 +308,22 @@
     .logo .name { display: none; }
     .rv { width: 290px; }
     .stat b { font-size: 1.9rem; }
+    .hero h1 { font-size: clamp(2.4rem, 13vw, 3.4rem); }
+    .hero .cta .btn { flex: 1 1 auto; justify-content: center; }
+    .stage h3 { font-size: .58rem; }
+    .map .chip { left: 12px; top: 12px; right: 12px; }
+    footer .top .btn { width: 100%; justify-content: center; }
+  }
+  /* short landscape phones: keep the wash scene on screen */
+  @media (max-height: 520px) and (orientation: landscape) {
+    :root { --navh: 60px; }
+    .process .eyebrow, .stages { display: none; }
+    .process h2 { font-size: 1.4rem; }
+    .ptop { flex-wrap: nowrap; align-items: center; }
+    .hud { width: 240px; }
+    .scene { margin-top: 10px; }
+    .scene svg { max-height: calc(100svh - var(--navh) - 90px); }
+    .hero { padding-top: 100px; }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition: none !important; }
@@ -292,8 +351,16 @@
       <a href="#process">How It Works</a>
       <a href="#reviews">Reviews</a>
       <a href="#visit" class="btn btn-yellow">Visit Us</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mnav"><span></span></button>
     </nav>
   </div>
+  <nav class="mnav" id="mnav" aria-label="Mobile">
+    <a href="#services">Services</a>
+    <a href="#process">How It Works</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#visit">Location</a>
+    <a href="#visit" class="btn btn-yellow">Get Directions</a>
+  </nav>
 </header>
 
 <section class="hero">
@@ -625,7 +692,7 @@
     ? `<article class="rv placeholder">${starsHTML(5, 'sm')}<blockquote>Customer review from Google goes here.</blockquote><div class="who"><div class="av">?</div><div><b>Reviewer name</b><span>Google review</span></div></div></article>`
     : `<article class="rv">${starsHTML(r.stars, 'sm')}<blockquote>“${esc(r.text)}”</blockquote><div class="who"><div class="av">${esc(r.name[0])}</div><div><b>${esc(r.name)}</b><span>Google review</span></div></div></article>`;
   const cards = list.map(card).join('');
-  document.getElementById('marquee').innerHTML = cards + cards; // duplicated for a seamless loop
+  document.getElementById('marquee').innerHTML = cards + cards.replaceAll('class="rv', 'class="rv dup'); // duplicated for a seamless loop
   const avg = REVIEWS.length ? Math.round(REVIEWS.reduce((s, r) => s + r.stars, 0) / REVIEWS.length) : 5;
   document.getElementById('avgStars').outerHTML = starsHTML(avg);
 
@@ -633,6 +700,32 @@
   const nav = document.getElementById('nav');
   const navCheck = () => nav.classList.toggle('solid', scrollY > 60);
   navCheck(); addEventListener('scroll', navCheck, { passive: true });
+
+  /* ---------- Mobile menu ---------- */
+  const menuBtn = document.getElementById('menuBtn');
+  const setMenu = open => { nav.classList.toggle('open', open); menuBtn.setAttribute('aria-expanded', open); menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu'); };
+  menuBtn.addEventListener('click', () => setMenu(!nav.classList.contains('open')));
+  document.querySelectorAll('#mnav a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+  addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+
+  /* ---------- Reviews: tap/click to read the full text ---------- */
+  const marquee = document.getElementById('marquee');
+  const markLong = () => marquee.querySelectorAll('.rv:not(.placeholder)').forEach(c => {
+    if (c.classList.contains('open')) return;
+    const q = c.querySelector('blockquote');
+    c.classList.toggle('long', q.scrollHeight > q.clientHeight + 2);
+  });
+  marquee.querySelectorAll('.rv:not(.placeholder)').forEach(c => {
+    c.querySelector('blockquote').insertAdjacentHTML('afterend', '<span class="hint">Read full review</span>');
+    c.addEventListener('click', () => {
+      if (!c.classList.contains('long')) return;
+      const open = !c.classList.toggle('open') ? false : true;
+      c.querySelector('.hint').textContent = open ? 'Show less' : 'Read full review';
+      marquee.classList.toggle('hold', !!marquee.querySelector('.rv.open'));
+    });
+  });
+  markLong(); addEventListener('resize', markLong);
+  document.fonts && document.fonts.ready.then(markLong);
 
   /* ---------- Hero bubbles ---------- */
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
